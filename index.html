@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#5865f2">
+<title>月城家チャット</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#313338;color:#f2f3f5;font-family:-apple-system,sans-serif}
+header{background:#232428;padding:18px;font-weight:bold;font-size:20px}
+nav{display:flex;background:#232428;gap:5px;padding:8px;position:sticky;top:0}
+button{background:#5865f2;color:white;border:0;border-radius:8px;padding:11px;cursor:pointer}
+nav button{flex:1}
+main{padding:14px;max-width:800px;margin:auto}
+.card{background:#2b2d31;border-radius:10px;padding:14px;margin-bottom:12px}
+input,textarea,select{background:#383a40;color:white;border:1px solid #555;border-radius:7px;padding:12px;width:100%;margin:5px 0}
+textarea{min-height:70px}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1;min-width:0}
+.small{color:#b5bac1;font-size:13px}
+#messages{min-height:180px;max-height:48vh;overflow:auto}
+.msg{padding:10px 0;border-bottom:1px solid #444;overflow-wrap:anywhere}
+.name{font-weight:bold;color:#c9cdfb}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>🌙 月城家チャット</header>
+<nav>
+<button onclick="page('chat')">💬 チャット</button>
+<button onclick="page('people')">👥 人格さん</button>
+<button onclick="page('diary')">📔 日記</button>
+<button onclick="page('settings')">⚙️ 設定</button>
+</nav>
+<main id="app"></main>
+<script>
+const KEY='tsukishiro_app_v1';
+let d;
+try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!d)d={account:'',profiles:[{id:1,name:'自分',emoji:'🌙',bio:''}],active:1,chats:[{id:1,name:'雑談',members:[1],messages:[]}],chat:1,diary:[]};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){alert('保存容量が不足しています。画像を減らしてください。')}}
+function id(){return Date.now()+Math.floor(Math.random()*9999)}
+function person(i){return d.profiles.find(p=>p.id==i)||{name:'削除済み',emoji:'👤'}}
+function current(){return person(d.active)}
+function page(p){d.page=p;render()}
+function render(){
+save();let a=document.getElementById('app');
+if(!d.account){
+a.innerHTML=`<section class="card"><h2>ようこそ！</h2><p>この端末で使うアカウント名を決めてね。</p><input id="account" placeholder="アカウント名"><button onclick="login()">使い始める</button><p class="small">試作版：データはこのブラウザ内に保存されます。</p></section>`;return;
+}
+if(!d.page)d.page='chat';
+if(d.page==='chat'){
+let c=d.chats.find(x=>x.id==d.chat)||d.chats[0];if(!c){a.innerHTML='<button onclick="newChat()">チャット作成</button>';return}d.chat=c.id;
+a.innerHTML=`<div class="card"><div class="row"><select id="chatSelect" onchange="d.chat=+this.value;render()">${d.chats.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select><button onclick="newChat()">＋新規</button></div><p class="small">使用中の人格：${esc(current().name)}</p><button onclick="switchPerson()">人格を切り替える</button></div>
+<div class="card"><h3># ${esc(c.name)}</h3><div id="messages">${c.messages.map(m=>`<div class="msg"><span class="name">${esc(person(m.from).emoji)} ${esc(person(m.from).name)}</span><div>${esc(m.text)}</div><div class="small">${new Date(m.time).toLocaleString('ja-JP')}</div>${m.sticker?`<div style="font-size:32px">${esc(m.sticker)}</div>`:''}</div>`).join('')||'<p class="small">まだメッセージはありません。</p>'}</div><textarea id="message" placeholder="メッセージを入力"></textarea><div class="row"><button onclick="send()">送信</button><button onclick="stickers()">スタンプ</button></div></div>`;
+}else if(d.page==='people'){
+a.innerHTML=`<h2>👥 人格プロフィール</h2><div class="card"><input id="pn" placeholder="名前"><input id="pe" placeholder="アイコン（例：🌙）"><textarea id="pb" placeholder="プロフィール"></textarea><button onclick="addPerson()">人格さんを追加</button></div>${d.profiles.map(p=>`<div class="card"><h3>${esc(p.emoji)} ${esc(p.name)} ${p.id===d.active?'（使用中）':''}</h3><p>${esc(p.bio)}</p><button onclick="usePerson(${p.id})">この人格に切替</button> <button onclick="editPerson(${p.id})">編集</button> <button onclick="dm(${p.id})">個別チャット</button></div>`).join('')}`;
+}else if(d.page==='diary'){
+a.innerHTML=`<h2>📔 人格ごとの日記</h2><div class="card"><p>書く人格：${esc(current().name)}</p><input id="dt" placeholder="タイトル"><textarea id="db" placeholder="今日の気持ちや出来事"></textarea><button onclick="addDiary()">日記を保存</button></div>${d.diary.slice().reverse().map(x=>`<div class="card"><b>${esc(person(x.from).emoji)} ${esc(person(x.from).name)}：${esc(x.title)}</b><p>${esc(x.body)}</p><div class="small">${new Date(x.time).toLocaleString('ja-JP')}</div><button onclick="delDiary(${x.id})">削除</button></div>`).join('')}`;
+}else{
+a.innerHTML=`<h2>⚙️ 設定</h2><div class="card"><p>アカウント：${esc(d.account)}</p><button onclick="backup()">データをバックアップ</button><p><input type="file" id="restore" accept=".json" onchange="restoreData(event)"></p><button onclick="logout()">ログアウト</button> <button onclick="wipe()">全データ削除</button><p class="small">この試作版は端末内保存です。別端末との同期や安全なオンライン認証には対応していません。</p></div>`;
+}
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function login(){let n=document.getElementById('account').value.trim();if(!n)return alert('アカウント名を入力してね');d.account=n;d.profiles[0].name=n;render()}
+function addPerson(){let n=document.getElementById('pn').value.trim();if(!n)return alert('名前を入力してね');d.profiles.push({id:id(),name:n,emoji:document.getElementById('pe').value||'👤',bio:document.getElementById('pb').value});render()}
+function usePerson(i){d.active=i;render()}
+function switchPerson(){let s=prompt('切り替える人格さんの番号：\n'+d.profiles.map((p,i)=>`${i+1}: ${p.name}`).join('\n'));let n=Number(s);if(n>0&&n<=d.profiles.length){d.active=d.profiles[n-1].id;render()}}
+function editPerson(i){let p=person(i),n=prompt('名前',p.name);if(n===null)return;p.name=n;p.emoji=prompt('アイコン絵文字',p.emoji)||p.emoji;p.bio=prompt('プロフィール',p.bio)||'';render()}
+function newChat(){let n=prompt('チャット名');if(!n)return;let c={id:id(),name:n,members:d.profiles.map(p=>p.id),messages:[]};d.chats.push(c);d.chat=c.id;page('chat')}
+function dm(i){let c=d.chats.find(x=>x.type==='dm'&&x.members.includes(i)&&x.members.includes(d.active));if(!c){c={id:id(),name:person(i).name,type:'dm',members:[i,d.active],messages:[]};d.chats.push(c)}d.chat=c.id;page('chat')}
+function send(){let t=document.getElementById('message').value.trim();if(!t)return;let c=d.chats.find(x=>x.id==d.chat);c.messages.push({from:d.active,text:t,time:Date.now()});render()}
+function stickers(){let s=prompt('スタンプを選んでね：😊 🥰 😭 👍 ❤️ 🎉 🌙 🐰','😊');if(!s)return;let c=d.chats.find(x=>x.id==d.chat);c.messages.push({from:d.active,text:'',sticker:s,time:Date.now()});render()}
+function addDiary(){let b=document.getElementById('db').value.trim();if(!b)return alert('本文を書いてね');d.diary.push({id:id(),from:d.active,title:document.getElementById('dt').value,body:b,time:Date.now()});render()}
+function delDiary(i){if(confirm('日記を削除しますか？')){d.diary=d.diary.filter(x=>x.id!==i);render()}}
+function backup(){let b=new Blob([JSON.stringify(d)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='月城家バックアップ.json';a.click();URL.revokeObjectURL(u)}
+function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.profiles||!x.chats)throw 0;d=x;render();alert('復元しました')}catch(e){alert('ファイルを読み込めませんでした')}};r.readAsText(f)}
+function logout(){d.account='';render()}
+function wipe(){if(confirm('全データを削除しますか？')){localStorage.removeItem(KEY);location.reload()}}
+render();
+</script>
+</body>
+</html>
