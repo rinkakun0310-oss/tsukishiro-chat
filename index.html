@@ -44,6 +44,183 @@ function id(){return Date.now()+Math.floor(Math.random()*9999)}
 function person(i){return d.profiles.find(p=>p.id==i)||{name:'削除済み',emoji:'👤'}}
 function current(){return person(d.active)}
 function page(p){d.page=p;render()}
+
+const ROSTER=[
+{"name":"雪吹（いぶき）","reading":"いぶき","age":1,"gender":"男の子"},
+{"name":"羽依（うい）","reading":"うい","age":1,"gender":"女の子"},
+{"name":"稔（みのり）","reading":"みのり","age":1,"gender":"男の子"},
+{"name":"飛昂（ひろ）","reading":"ひろ","age":1,"gender":"男の子"},
+{"name":"留佳（るか）","reading":"るか","age":1,"gender":"男の子"},
+{"name":"星羅（せいら）","reading":"せいら","age":1,"gender":"女の子"},
+{"name":"結乃（ゆの）","reading":"ゆの","age":1,"gender":"女の子"},
+{"name":"琥空（こあ）","reading":"こあ","age":1,"gender":"男の子"},
+{"name":"岳斗（がくと）","reading":"がくと","age":1,"gender":"男の子"},
+{"name":"麻芽（まめ）","reading":"まめ","age":1,"gender":"男の子"},
+{"name":"綺利（いろり）","reading":"いろり","age":2,"gender":"男の子"},
+{"name":"Maru（まる）","reading":"まる","age":2,"gender":"男の子"},
+{"name":"有都（あると）","reading":"あると","age":2,"gender":"男の子"},
+{"name":"琴音（ことね）","reading":"ことね","age":2,"gender":"女の子"},
+{"name":"綺唯（きい）","reading":"きい","age":2,"gender":"女の子"},
+{"name":"悠里（ゆうり）","reading":"ゆうり","age":2,"gender":"男の子"},
+{"name":"心爾（るい）","reading":"るい","age":2,"gender":"男の子"},
+{"name":"心臓（みらい）","reading":"みらい","age":2,"gender":"女の子"},
+{"name":"宇夜（うる）","reading":"うる","age":2,"gender":"女の子"},
+{"name":"檀真（とうま）","reading":"とうま","age":2,"gender":"男の子"},
+{"name":"舞蝶（あげは）","reading":"あげは","age":2,"gender":"女の子"},
+{"name":"Marron（マロン）","reading":"マロン","age":2,"gender":"未設定"},
+{"name":"紅凛々（くらら）","reading":"くらら","age":3,"gender":"女の子"},
+{"name":"拓真（たくま）","reading":"たくま","age":3,"gender":"男の子"},
+{"name":"雷（らい）","reading":"らい","age":3,"gender":"男の子"},
+{"name":"紬生（つむぎ）","reading":"つむぎ","age":3,"gender":"女の子"},
+{"name":"湿無（ねむ）","reading":"ねむ","age":3,"gender":"男の子"},
+{"name":"莉蘭（りら）","reading":"りら","age":3,"gender":"女の子"},
+{"name":"朔斗（さくと）","reading":"さくと","age":3,"gender":"男の子"},
+{"name":"美奈（みな）","reading":"みな","age":3,"gender":"女の子"},
+{"name":"羽琉（るる）","reading":"るる","age":3,"gender":"女の子"},
+{"name":"桜香（おうか）","reading":"おうか","age":4,"gender":"女の子"},
+{"name":"結城（ゆうき）","reading":"ゆうき","age":4,"gender":"男の子"},
+{"name":"奏（かなで）","reading":"かなで","age":4,"gender":"女の子"},
+{"name":"響希（ひびき）","reading":"ひびき","age":4,"gender":"男の子"},
+{"name":"結翔（ゆいと）","reading":"ゆいと","age":4,"gender":"男の子"},
+{"name":"柚杏（ゆあん）","reading":"ゆあん","age":4,"gender":"男の子"},
+{"name":"快（かい）","reading":"かい","age":4,"gender":"男の子"},
+{"name":"羽瑠真（うるま）","reading":"うるま","age":4,"gender":"男の子"},
+{"name":"飛天（ひてん）","reading":"ひてん","age":4,"gender":"男の子"},
+{"name":"咲羅（さくら）","reading":"さくら","age":4,"gender":"女の子"},
+{"name":"蘭天（らてん）","reading":"らてん","age":4,"gender":"女の子"},
+{"name":"元樹（もとき）","reading":"もとき","age":4,"gender":"男の子"},
+{"name":"潤羽（うるは）","reading":"うるは","age":5,"gender":"女の子"},
+{"name":"梓真（あずま）","reading":"あずま","age":5,"gender":"未設定"},
+{"name":"鈴（すず）","reading":"すず","age":5,"gender":"女の子"},
+{"name":"優珠（ゆず）","reading":"ゆず","age":5,"gender":"女の子"},
+{"name":"空音（そらね）","reading":"そらね","age":5,"gender":"女の子"},
+{"name":"和真（かずま）","reading":"かずま","age":5,"gender":"男の子"},
+{"name":"幸（こう）","reading":"こう","age":5,"gender":"男の子"},
+{"name":"飛勇（ひゆう）","reading":"ひゆう","age":5,"gender":"男の子"},
+{"name":"朔羅（さくら）","reading":"さくら","age":6,"gender":"男の子"},
+{"name":"琉優（るゆ）","reading":"るゆ","age":6,"gender":"女の子"},
+{"name":"乃碧（のあ）","reading":"のあ","age":6,"gender":"男の子"},
+{"name":"藍（らん）","reading":"らん","age":6,"gender":"男の子"},
+{"name":"叶音（かのん）","reading":"かのん","age":6,"gender":"女の子"},
+{"name":"輝人（てると）","reading":"てると","age":6,"gender":"男の子"},
+{"name":"湊（みなと）","reading":"みなと","age":6,"gender":"男の子"},
+{"name":"心亜（ここあ）","reading":"ここあ","age":6,"gender":"女の子"},
+{"name":"莉樺（りぬ）","reading":"りぬ","age":7,"gender":"男の子"},
+{"name":"宇津（うつ）","reading":"うつ","age":7,"gender":"男の子"},
+{"name":"海夏人（かなと）","reading":"かなと","age":7,"gender":"男の子"},
+{"name":"美琴（みこと）","reading":"みこと","age":7,"gender":"女の子"},
+{"name":"綺琉兎（きると）","reading":"きると","age":7,"gender":"男の子"},
+{"name":"維織（いおり）","reading":"いおり","age":7,"gender":"男の子"},
+{"name":"蒼依（あおい）","reading":"あおい","age":8,"gender":"男の子"},
+{"name":"海音（かいと）","reading":"かいと","age":8,"gender":"男の子"},
+{"name":"泉（いずみ）","reading":"いずみ","age":8,"gender":"男の子"},
+{"name":"四葉（よつば）","reading":"よつば","age":8,"gender":"男の子"},
+{"name":"七海（ななみ）","reading":"ななみ","age":9,"gender":"女の子"},
+{"name":"琥珀（こはく）","reading":"こはく","age":9,"gender":"男の子"},
+{"name":"宙（そら）","reading":"そら","age":9,"gender":"男の子"},
+{"name":"翠（すい）","reading":"すい","age":9,"gender":"男の子"},
+{"name":"李遠（りおん）","reading":"りおん","age":9,"gender":"男の子"},
+{"name":"紫音（しおん）","reading":"しおん","age":9,"gender":"男の子"},
+{"name":"雪兎（ゆきと）","reading":"ゆきと","age":9,"gender":"男の子"},
+{"name":"茜（あかね）","reading":"あかね","age":10,"gender":"女の子"},
+{"name":"楓（かえで）","reading":"かえで","age":10,"gender":"女の子"},
+{"name":"稲荷（いなり）","reading":"いなり","age":10,"gender":"男の子"},
+{"name":"颯馬（そうま）","reading":"そうま","age":10,"gender":"男の子"},
+{"name":"那翔（なる）","reading":"なる","age":10,"gender":"男の子"},
+{"name":"悠弥（ゆや）","reading":"ゆや","age":11,"gender":"男の子"},
+{"name":"凪沙（なぎさ）","reading":"なぎさ","age":12,"gender":"男の子"},
+{"name":"凛（りん）","reading":"りん","age":12,"gender":"女の子"},
+{"name":"虹羽（このは）","reading":"このは","age":12,"gender":"男の子"},
+{"name":"不破斗（ふわと）","reading":"ふわと","age":12,"gender":"男の子"},
+{"name":"天空海（あくあ）","reading":"あくあ","age":12,"gender":"男の子"},
+{"name":"結（ゆい）","reading":"ゆい","age":12,"gender":"女の子"},
+{"name":"冬音（ふゆね）","reading":"ふゆね","age":13,"gender":"男の子"},
+{"name":"雨晴（あめ）","reading":"あめ","age":13,"gender":"男の子"},
+{"name":"琳加（りんか）","reading":"りんか","age":14,"gender":"男の子"},
+{"name":"氷雨（ひさめ）","reading":"ひさめ","age":14,"gender":"男の子"},
+{"name":"朱愛（しゅあ）","reading":"しゅあ","age":14,"gender":"女の子"},
+{"name":"流希（るき）","reading":"るき","age":14,"gender":"男の子"},
+{"name":"琳寧（りんね）","reading":"りんね","age":14,"gender":"男の子"},
+{"name":"廉（れん）","reading":"れん","age":15,"gender":"男の子"},
+{"name":"露亜（るあ）","reading":"るあ","age":15,"gender":"男の子"},
+{"name":"唯真（ゆま）","reading":"ゆま","age":15,"gender":"男の子"},
+{"name":"兎天（うてん）","reading":"うてん","age":15,"gender":"男の子"},
+{"name":"赫兎（あかと）","reading":"あかと","age":15,"gender":"男の子"},
+{"name":"大翔（やまと）","reading":"やまと","age":15,"gender":"男の子"},
+{"name":"甑真（かるま）","reading":"かるま","age":15,"gender":"男の子"},
+{"name":"星空（せら）","reading":"せら","age":16,"gender":"女の子"},
+{"name":"枕（もみじ）","reading":"もみじ","age":16,"gender":"女の子"},
+{"name":"宵（よい）","reading":"よい","age":16,"gender":"男の子"},
+{"name":"天瀬（あまね）","reading":"あまね","age":16,"gender":"男の子"},
+{"name":"羽音（はおと）","reading":"はおと","age":16,"gender":"男の子"},
+{"name":"優斗（ゆうと）","reading":"ゆうと","age":16,"gender":"男の子"},
+{"name":"琴（こと）","reading":"こと","age":16,"gender":"女の子"},
+{"name":"逢夢（あむ）","reading":"あむ","age":17,"gender":"男の子"},
+{"name":"空叶（くうと）","reading":"くうと","age":17,"gender":"男の子"},
+{"name":"時雨（しぐれ）","reading":"しぐれ","age":17,"gender":"男の子"},
+{"name":"翔生（とき）","reading":"とき","age":17,"gender":"男の子"},
+{"name":"武（いさむ）","reading":"いさむ","age":17,"gender":"男の子"},
+{"name":"志都（しず）","reading":"しず","age":17,"gender":"男の子"},
+{"name":"七星（ななせ）","reading":"ななせ","age":17,"gender":"男の子"},
+{"name":"大空（だいあ）","reading":"だいあ","age":17,"gender":"男の子"},
+{"name":"蒼羽（あおば）","reading":"あおば","age":18,"gender":"男の子"},
+{"name":"祐月（ゆづき）","reading":"ゆづき","age":18,"gender":"男の子"},
+{"name":"来輝（らいき）","reading":"らいき","age":18,"gender":"男の子"},
+{"name":"莉久（りく）","reading":"りく","age":18,"gender":"男の子"},
+{"name":"久那弥（くない）","reading":"くない","age":18,"gender":"男の子"},
+{"name":"志永琉（シェル）","reading":"シェル","age":18,"gender":"男の子"},
+{"name":"晴空（はるく）","reading":"はるく","age":18,"gender":"男の子"},
+{"name":"暁月（あかつき）","reading":"あかつき","age":19,"gender":"男の子"},
+{"name":"樹（いつき）","reading":"いつき","age":19,"gender":"男の子"},
+{"name":"雫（しずく）","reading":"しずく","age":19,"gender":"女の子"},
+{"name":"綾人（あやと）","reading":"あやと","age":19,"gender":"男の子"},
+{"name":"天磨（てんま）","reading":"てんま","age":19,"gender":"男の子"},
+{"name":"夢羅（ゆら）","reading":"ゆら","age":20,"gender":"中性"},
+{"name":"歩夢（あゆむ）","reading":"あゆむ","age":20,"gender":"男性"},
+{"name":"沙羅（さら）","reading":"さら","age":20,"gender":"女性"},
+{"name":"莉都（りつ）","reading":"りつ","age":21,"gender":"男性"},
+{"name":"朝翔（あすか）","reading":"あすか","age":22,"gender":"男性"},
+{"name":"空彩（そあ）","reading":"そあ","age":22,"gender":"女性"},
+{"name":"優（ゆう）","reading":"ゆう","age":22,"gender":"男性"},
+{"name":"夜刃（やいば）","reading":"やいば","age":22,"gender":"男性"},
+{"name":"紗都香（さとか）","reading":"さとか","age":22,"gender":"女性"},
+{"name":"彩雨（あや）","reading":"あや","age":23,"gender":"女性"},
+{"name":"嶺亜（れいあ）","reading":"れいあ","age":23,"gender":"男性"},
+{"name":"蒼月（あつき）","reading":"あつき","age":23,"gender":"男性"},
+{"name":"海月（くらげ）","reading":"くらげ","age":23,"gender":"女性"},
+{"name":"彩桃（もも）","reading":"もも","age":24,"gender":"女性"},
+{"name":"朱雨（しゅう）","reading":"しゅう","age":24,"gender":"男性"},
+{"name":"夜斗（ないと）","reading":"ないと","age":24,"gender":"男性"},
+{"name":"皐月（さつき）","reading":"さつき","age":25,"gender":"女性"},
+{"name":"萌咲奈（もえな）","reading":"もえな","age":25,"gender":"女性"},
+{"name":"暁斗（あきと）","reading":"あきと","age":25,"gender":"男性"},
+{"name":"真城（ましろ）","reading":"ましろ","age":25,"gender":"男性"},
+{"name":"琉生（るい）","reading":"るい","age":26,"gender":"男性"},
+{"name":"千尋（ちひろ）","reading":"ちひろ","age":26,"gender":"女性"},
+{"name":"佐野（さの）","reading":"さの","age":27,"gender":"男性"},
+{"name":"伊都（いと）","reading":"いと","age":27,"gender":"男性"},
+{"name":"於琉雅（おるか）","reading":"おるか","age":28,"gender":"男性"},
+{"name":"獅音（れおん）","reading":"れおん","age":28,"gender":"男性"},
+{"name":"翔央（しょう）","reading":"しょう","age":32,"gender":"男性"},
+{"name":"翠生（れい）","reading":"れい","age":35,"gender":"男性"},
+{"name":"誠（まこと）","reading":"まこと","age":42,"gender":"男性"},
+{"name":"姫（ひめ）","reading":"ひめ","age":20,"gender":"女性"}
+];
+
+function bulkAddRoster(){
+const existing=new Set(d.profiles.map(p=>String(p.name).trim()));
+const add=ROSTER.filter(x=>!existing.has(x.name)).map(x=>({
+id:id(),name:x.name,emoji:'👤',
+bio:`年齢：${x.age}歳\n性別：${x.gender}\n読み：${x.reading}`,
+age:x.age,gender:x.gender,reading:x.reading
+}));
+if(!add.length){alert('名簿の人格さんはすでに登録されています。');return;}
+if(!confirm(`名簿から${add.length}人を追加します。既存のチャット・日記・人格は削除しません。よろしいですか？`))return;
+d.profiles.push(...add);
+save();render();
+alert(`${add.length}人を追加しました！`);
+}
+
 function render(){
 save();let a=document.getElementById('app');
 if(!d.account){
@@ -51,11 +228,13 @@ a.innerHTML=`<section class="card"><h2>ようこそ！</h2><p>この端末で使
 }
 if(!d.page)d.page='chat';
 if(d.page==='chat'){
-let c=d.chats.find(x=>x.id==d.chat)||d.chats[0];if(!c){a.innerHTML='<button onclick="newChat()">チャット作成</button>';return}d.chat=c.id;
+let c=d.chats.find(x=>x.id==d.chat)||d.chats[0];
+if(!c){a.innerHTML='<button onclick="newChat()">チャット作成</button>';return}
+d.chat=c.id;
 a.innerHTML=`<div class="card"><div class="row"><select id="chatSelect" onchange="d.chat=+this.value;render()">${d.chats.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select><button onclick="newChat()">＋新規</button></div><p class="small">使用中の人格：${esc(current().name)}</p><button onclick="switchPerson()">人格を切り替える</button></div>
 <div class="card"><h3># ${esc(c.name)}</h3><div id="messages">${c.messages.map(m=>`<div class="msg"><span class="name">${esc(person(m.from).emoji)} ${esc(person(m.from).name)}</span><div>${esc(m.text)}</div><div class="small">${new Date(m.time).toLocaleString('ja-JP')}</div>${m.sticker?`<div style="font-size:32px">${esc(m.sticker)}</div>`:''}</div>`).join('')||'<p class="small">まだメッセージはありません。</p>'}</div><textarea id="message" placeholder="メッセージを入力"></textarea><div class="row"><button onclick="send()">送信</button><button onclick="stickers()">スタンプ</button></div></div>`;
 }else if(d.page==='people'){
-a.innerHTML=`<h2>👥 人格プロフィール</h2><div class="card"><input id="pn" placeholder="名前"><input id="pe" placeholder="アイコン（例：🌙）"><textarea id="pb" placeholder="プロフィール"></textarea><button onclick="addPerson()">人格さんを追加</button></div>${d.profiles.map(p=>`<div class="card"><h3>${esc(p.emoji)} ${esc(p.name)} ${p.id===d.active?'（使用中）':''}</h3><p>${esc(p.bio)}</p><button onclick="usePerson(${p.id})">この人格に切替</button> <button onclick="editPerson(${p.id})">編集</button> <button onclick="dm(${p.id})">個別チャット</button></div>`).join('')}`;
+a.innerHTML=`<h2>👥 人格プロフィール</h2><div class="card"><button onclick="bulkAddRoster()">📋 名簿159人を一括登録</button><p class="small">PDFの名簿から名前・読み・年齢・性別を登録します。登録済みの名前は重複追加しません。</p><input id="pn" placeholder="名前"><input id="pe" placeholder="アイコン（例：🌙）"><textarea id="pb" placeholder="プロフィール"></textarea><button onclick="addPerson()">人格さんを追加</button></div>${d.profiles.map(p=>`<div class="card"><h3>${esc(p.emoji)} ${esc(p.name)} ${p.id===d.active?'（使用中）':''}</h3><p>${esc(p.bio)}</p><button onclick="usePerson(${p.id})">この人格に切替</button> <button onclick="editPerson(${p.id})">編集</button> <button onclick="dm(${p.id})">個別チャット</button></div>`).join('')}`;
 }else if(d.page==='diary'){
 a.innerHTML=`<h2>📔 人格ごとの日記</h2><div class="card"><p>書く人格：${esc(current().name)}</p><input id="dt" placeholder="タイトル"><textarea id="db" placeholder="今日の気持ちや出来事"></textarea><button onclick="addDiary()">日記を保存</button></div>${d.diary.slice().reverse().map(x=>`<div class="card"><b>${esc(person(x.from).emoji)} ${esc(person(x.from).name)}：${esc(x.title)}</b><p>${esc(x.body)}</p><div class="small">${new Date(x.time).toLocaleString('ja-JP')}</div><button onclick="delDiary(${x.id})">削除</button></div>`).join('')}`;
 }else{
